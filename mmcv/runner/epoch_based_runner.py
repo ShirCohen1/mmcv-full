@@ -159,7 +159,7 @@ class EpochBasedRunner(BaseRunner):
                          self._max_epochs)
         self.call_hook('before_run')
 
-        results = pd.DataFrame(coulmns = ['epoch', 'train_loss', 'val_loss'])
+        results = pd.DataFrame(columns = ['epoch', 'train_loss', 'val_loss'])
 
         while self.epoch < self._max_epochs :
             for i, flow in enumerate(workflow):
