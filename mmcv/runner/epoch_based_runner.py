@@ -160,7 +160,7 @@ class EpochBasedRunner(BaseRunner):
                          self._max_epochs)
         self.call_hook('before_run')
 
-        results = pd.DataFrame(columns = ['epoch', 'train_loss', 'val_loss'])
+#         results = pd.DataFrame(columns = ['epoch', 'train_loss', 'val_loss'])
 
         while self.epoch < self._max_epochs :
             for i, flow in enumerate(workflow):
@@ -182,27 +182,28 @@ class EpochBasedRunner(BaseRunner):
 
                     epoch_runner(data_loaders[i], **kwargs) # Runs one epoch and multiple iterations in batches
             
-            ##save history
-            epoch = self.epoch
-            train_loss = self.meta['train_metrics'][self.epoch-1]
+#             ##save history
+#             epoch = self.epoch
+#             train_loss = self.meta['train_metrics'][self.epoch-1]
             
-            print(loss_train)
-            print(type(loss_train))
-            print(loss_train.cpu())
-            print(type(loss_train))
+#             print(loss_train)
+#             print(type(loss_train))
+#             print(loss_train.cpu())
+#             print(type(loss_train))
 
-            val_loss = self.meta['val_metrics'][self.epoch-1]
+#             val_loss = self.meta['val_metrics'][self.epoch-1]
 
-            tmp_result = pd.DataFrame([epoch, train_loss, val_loss], columns = ['epoch', 'train_loss', 'val_loss'])
-            results = pd.concat([tmp_result, results])
-            print(results)
+#             tmp_result = pd.DataFrame([epoch, train_loss, val_loss], columns = ['epoch', 'train_loss', 'val_loss'])
+#             results = pd.concat([tmp_result, results])
+#             print(results)
 
             if early_stopper.check_stop_condition(self.meta['val_metrics']):
                 break
 
         print(f"train losses: {self.meta['train_metrics']}")
         print(f"val losses: {self.meta['val_metrics']}")
-
+        results = [self.meta['train_metrics'],self.meta['val_metrics']]
+        
         time.sleep(1)  # wait for some hooks like loggers to finish
         self.call_hook('after_run')
         return results
