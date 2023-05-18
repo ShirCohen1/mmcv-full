@@ -75,10 +75,10 @@ class EpochBasedRunner(BaseRunner):
             self._inner_iter = i
             self.call_hook('before_train_iter')
             self.run_iter(data_batch, train_mode=True, **kwargs)
-            if i == 0:
-                outputs_to_avg = self.outputs['loss']
-            if i > 0:
-                outputs_to_avg = torch.cat((outputs_to_avg.reshape(-1) , self.outputs['loss'].reshape(1)),dim=0)
+#             if i == 0:
+#                 outputs_to_avg = self.outputs['loss']
+#             if i > 0:
+#                 outputs_to_avg = torch.cat((outputs_to_avg.reshape(-1) , self.outputs['loss'].reshape(1)),dim=0)
             self.call_hook('after_train_iter')
             del self.data_batch
             self._iter += 1
@@ -88,7 +88,7 @@ class EpochBasedRunner(BaseRunner):
         self.call_hook('after_train_epoch')
         self._epoch += 1
         
-        self.meta['train_metrics'].append(outputs_to_avg.mean())
+#         self.meta['train_metrics'].append(outputs_to_avg.mean())
 
 
     @torch.no_grad()
@@ -132,7 +132,7 @@ class EpochBasedRunner(BaseRunner):
         assert mmcv.is_list_of(workflow, tuple)
         assert len(data_loaders) == len(workflow)
 
-        self.meta['train_metrics'] = list()
+#         self.meta['train_metrics'] = list()
         self.meta['val_metrics'] = list()
         patience = self.meta['patience']
         early_stopper = early_stopping(patience)
@@ -201,7 +201,7 @@ class EpochBasedRunner(BaseRunner):
             if early_stopper.check_stop_condition(self.meta['val_metrics']):
                 break
 
-        print(f"train losses: {self.meta['train_metrics']}")
+#         print(f"train losses: {self.meta['train_metrics']}")
         print(f"val losses: {self.meta['val_metrics']}")
 #         results = np.array([self.meta['train_metrics'].numpy(),self.meta['val_metrics'].numpy()])
 #         results = self.meta['train_metrics'].numpy()
