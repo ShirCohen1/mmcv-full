@@ -204,11 +204,11 @@ class EpochBasedRunner(BaseRunner):
         print(f"train losses: {self.meta['train_metrics']}")
         print(f"val losses: {self.meta['val_metrics']}")
 #         results = np.array([self.meta['train_metrics'].numpy(),self.meta['val_metrics'].numpy()])
-        
-        results = self.meta['train_metrics'].numpy()
+#         results = self.meta['train_metrics'].numpy()
+
         time.sleep(1)  # wait for some hooks like loggers to finish
         self.call_hook('after_run')
-        return results
+        return 
 
     def save_checkpoint(self,
                         out_dir: str,
