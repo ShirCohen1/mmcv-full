@@ -192,8 +192,9 @@ class EpochBasedRunner(BaseRunner):
         print(f"val losses: {self.meta['val_metrics']}")
 #         time.sleep(1)  # wait for some hooks like loggers to finish
 #         self.call_hook('after_run')
+        print("before")
         result = self.meta['train_metrics']
-        print(result)
+        print("after", result)
         return result
 
     def save_checkpoint(self,
