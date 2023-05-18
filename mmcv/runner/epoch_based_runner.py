@@ -73,6 +73,10 @@ class EpochBasedRunner(BaseRunner):
             self._inner_iter = i
             self.call_hook('before_train_iter')
             self.run_iter(data_batch, train_mode=True, **kwargs)
+            if i == 0:
+                outputs_to_avg = self.outputs['loss']
+            if i > 0:
+                outputs_to_avg = torch.cat((outputs_to_avg.reshape(-1) , self.outputs['loss'].reshape(1)),dim=0)
             self.call_hook('after_train_iter')
             del self.data_batch
             self._iter += 1
@@ -82,6 +86,9 @@ class EpochBasedRunner(BaseRunner):
 
         self.call_hook('after_train_epoch')
         self._epoch += 1
+        
+        self.meta['train_metrics'].append(outputs_to_avg.mean())
+
 
     @torch.no_grad()
     def val(self, data_loader, **kwargs):
@@ -127,6 +134,8 @@ class EpochBasedRunner(BaseRunner):
         assert len(data_loaders) == len(workflow)
 
         self.meta['val_metrics'] = list()
+        self.meta['train_metrics'] = list()
+
         patience = self.meta['patience']
         early_stopper = early_stopping(patience)
 
@@ -144,7 +153,6 @@ class EpochBasedRunner(BaseRunner):
             if mode == 'train':
                 self._max_iters = self._max_epochs * len(data_loaders[i])
                 break
-
 
 
         work_dir = self.work_dir if self.work_dir is not None else 'NONE'
@@ -179,6 +187,8 @@ class EpochBasedRunner(BaseRunner):
 
             if early_stopper.check_stop_condition(self.meta['val_metrics']):
                 break
+                
+        print(f"train losses: {self.meta['train_metrics']}")
         print(f"val losses: {self.meta['val_metrics']}")
         time.sleep(1)  # wait for some hooks like loggers to finish
         self.call_hook('after_run')
