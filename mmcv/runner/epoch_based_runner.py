@@ -184,8 +184,8 @@ class EpochBasedRunner(BaseRunner):
             
             ##save history
             epoch = self.epoch
-            train_loss = self.meta['train_metrics'][self.epoch-1]
-            val_loss = self.meta['val_metrics'][self.epoch-1]
+            train_loss = self.meta['train_metrics'][self.epoch-1].cpu()
+            val_loss = self.meta['val_metrics'][self.epoch-1].cpu()
 
             tmp_result = pd.DataFrame([epoch, train_loss, val_loss], columns = ['epoch', 'train_loss', 'val_loss'])
             results = pd.concat([tmp_result, results])
