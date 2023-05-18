@@ -5,6 +5,7 @@ import shutil
 import time
 import warnings
 import pandas as pd
+import numpy as np
 from typing import Any, Dict, List, Optional, Tuple
 
 import torch
@@ -202,7 +203,7 @@ class EpochBasedRunner(BaseRunner):
 
         print(f"train losses: {self.meta['train_metrics']}")
         print(f"val losses: {self.meta['val_metrics']}")
-        results = [self.meta['train_metrics'],self.meta['val_metrics']]
+        results = np.array([self.meta['train_metrics'].numpy(),self.meta['val_metrics'].numpy()])
         
         time.sleep(1)  # wait for some hooks like loggers to finish
         self.call_hook('after_run')
