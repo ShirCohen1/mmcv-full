@@ -81,13 +81,14 @@ class EpochBasedRunner(BaseRunner):
             self.call_hook('after_train_iter')
             del self.data_batch
             self._iter += 1
-        self.meta['train_metrics'].append(outputs_to_avg.mean())
-
         #dana added
         self.save_checkpoint(self.work_dir, f'epoch_{self._epoch}.pth')
 
         self.call_hook('after_train_epoch')
         self._epoch += 1
+        
+        self.meta['train_metrics'].append(outputs_to_avg.mean())
+
 
     @torch.no_grad()
     def val(self, data_loader, **kwargs):
@@ -186,8 +187,8 @@ class EpochBasedRunner(BaseRunner):
             train_loss = self.meta['train_metrics'][self.epoch-1]
             val_loss = self.meta['val_metrics'][self.epoch-1]
 
-            tmp_result = pd.DataFrame([epoch, train_loss, val_loss], coulmns = ['epoch', 'train_loss', 'val_loss'])
-            results = pd.concat([tmp_result, results], axis = 0)
+            tmp_result = pd.DataFrame([epoch, train_loss, val_loss], columns = ['epoch', 'train_loss', 'val_loss'])
+            results = pd.concat([tmp_result, results])
             print(results)
 
             if early_stopper.check_stop_condition(self.meta['val_metrics']):
