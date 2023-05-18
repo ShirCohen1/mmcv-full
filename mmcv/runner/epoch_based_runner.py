@@ -87,7 +87,7 @@ class EpochBasedRunner(BaseRunner):
         self.call_hook('after_train_epoch')
         self._epoch += 1
         
-        self.meta['train_metrics'].append(outputs_to_avg.mean())
+        self.meta['train_metrics'].append(outputs_to_avg.mean().item())
 
 
     @torch.no_grad()
@@ -111,7 +111,7 @@ class EpochBasedRunner(BaseRunner):
             del self.data_batch
         self.call_hook('after_val_epoch')
 
-        self.meta['val_metrics'].append(outputs_to_avg.mean())
+        self.meta['val_metrics'].append(outputs_to_avg.mean().item())
 
 
     def run(self,
