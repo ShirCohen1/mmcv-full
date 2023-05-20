@@ -196,9 +196,9 @@ class EpochBasedRunner(BaseRunner):
         self.call_hook('after_run')
         
         df = pd.DataFrame({
-        'epoch': range(1, len(train_losses) + 1),
-        'train_loss': train_losses,
-        'val_loss': val_losses
+        'epoch': range(1, len(self.meta['train_metrics']) + 1),
+        'train_loss': self.meta['train_metrics'],
+        'val_loss': self.meta['val_metrics']
         })
          
         print("Losses:")
