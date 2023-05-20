@@ -190,12 +190,19 @@ class EpochBasedRunner(BaseRunner):
                 
         print(f"train losses: {self.meta['train_metrics']}")
         print(f"val losses: {self.meta['val_metrics']}")
-#         time.sleep(1)  # wait for some hooks like loggers to finish
-#         self.call_hook('after_run')
-        print("before")
-        result = self.meta['train_metrics']
-        print("after", result)
-        return result
+        
+        time.sleep(1)  # wait for some hooks like loggers to finish
+        self.call_hook('after_run')
+        
+         df = pd.DataFrame({
+        'epoch': range(1, len(train_losses) + 1),
+        'train_loss': train_losses,
+        'val_loss': val_losses
+        })
+         
+        print("Losses:")
+        print(df)
+        return df
 
     def save_checkpoint(self,
                         out_dir: str,
