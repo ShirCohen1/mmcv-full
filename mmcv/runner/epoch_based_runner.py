@@ -4,6 +4,7 @@ import platform
 import shutil
 import time
 import warnings
+import pandas as pd
 from typing import Any, Dict, List, Optional, Tuple
 
 import torch
