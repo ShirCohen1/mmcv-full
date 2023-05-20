@@ -194,7 +194,7 @@ class EpochBasedRunner(BaseRunner):
         time.sleep(1)  # wait for some hooks like loggers to finish
         self.call_hook('after_run')
         
-         df = pd.DataFrame({
+        df = pd.DataFrame({
         'epoch': range(1, len(train_losses) + 1),
         'train_loss': train_losses,
         'val_loss': val_losses
